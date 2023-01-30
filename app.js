@@ -1,10 +1,22 @@
 const { createClient } = require('oicq')
 const request = require('request');
 const fs = require('fs');
+const path = require('path')
+
+app_config = {
+    log_level: "info",
+    platform: 5,
+    auto_server: true,
+    ignore_self: true,
+    resend: true,
+    cache_group_member: true,
+    reconn_interval: 5,
+    data_dir: path.join(process.cwd(), "data"),
+}
 
 const config_file = fs.readFileSync('config.json');
 const config = JSON.parse(config_file);
-const client = createClient(config.account)
+const client = createClient(config.account, app_config)
 
 client.on("system.login.qrcode", function (e) {
     //扫码后按回车登录
