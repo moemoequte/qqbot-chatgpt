@@ -28,7 +28,7 @@ client.on("system.online", () => console.log("Logged in!"))
 
 client.on("message.group", msg => {
     message = msg.toString()
-    if(message[0] = '!') {
+    if(message[0] === '!') {
         message.replace('!', ' ')
         request.post({url: 'https://cialloo.com/api/chatgpt', body: {'message': message}, json: true}, (err, res, body) => {
             let temp = ""
