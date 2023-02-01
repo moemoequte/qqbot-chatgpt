@@ -18,15 +18,23 @@ const config_file = fs.readFileSync('config.json');
 const config = JSON.parse(config_file);
 const client = createClient(config.account, app_config)
 
-client.on("system.login.qrcode", function (e) {
-    //扫码后按回车登录
-    process.stdin.once("data", () => {
-      this.login()
-    })
-}).login()
-client.on("system.online", () => console.log("Logged in!"))
+if(config.password === "none") {
+    client.on("system.login.qrcode", function (e) {
+        //扫码后按回车登录
+        process.stdin.once("data", () => {
+          this.login()
+        })
+    }).login()
+    client.on("system.online", () => console.log("Logged in!"))
+}
+else {
+    client.on("system.login.slider", function (e) {
+        console.log("输入ticket：")
+        process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
+    }).login(config.password)
+}
 
-client.on("message.group", msg => {
+client.on("message", msg => {
     message = msg.toString()
     if(message[0] === '!') {
         message.replace('!', ' ')
